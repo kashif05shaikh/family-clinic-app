@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE = import.meta.env.VITE_API_URL || '';
+const API_BASE = import.meta.env.VITE_API_URL || 'https://falak-family-clinic-1.onrender.com';
 
 const client = axios.create({
   baseURL: API_BASE,
