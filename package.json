@@ -1,0 +1,9 @@
+{
+  "name": "falak-family-clinic",
+  "private": true,
+  "description": "Falak Family Clinic – monorepo helpers if a host uses the repo root",
+  "scripts": {
+    "start": "npm --prefix backend start",
+    "postinstall": "npm install --prefix backend"
+  }
+}

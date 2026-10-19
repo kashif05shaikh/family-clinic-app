@@ -9,7 +9,11 @@ dotenv.config({ path: join(__dirname, '..', '.env') });
 
 const seedDoctor = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URI);
+    const mongoUri = process.env.MONGODB_URI || process.env.MONGO_URI;
+    if (!mongoUri) {
+      throw new Error('Set MONGODB_URI (or MONGO_URI) before running the seed script.');
+    }
+    await mongoose.connect(mongoUri);
     const email = process.env.DOCTOR_EMAIL || 'drfalakkhaleelahmed@gmail.com';
     const password = process.env.DOCTOR_PASSWORD || 'Doctor@123';
 

@@ -3,13 +3,15 @@ import cors from 'cors';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+import path from 'path';
 
 import connectDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
 import appointmentRoutes from './routes/appointmentRoutes.js';
 
-dotenv.config();
-connectDB();
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.join(__dirname, '.env') });
 
 const app = express();
 const httpServer = createServer(app);
@@ -43,8 +45,17 @@ io.on('connection', (socket) => {
   });
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = Number(process.env.PORT) || 5000;
+const HOST = '0.0.0.0';
 
-httpServer.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+const start = async () => {
+  await connectDB();
+  httpServer.listen(PORT, HOST, () => {
+    console.log(`Server running on ${HOST}:${PORT}`);
+  });
+};
+
+start().catch((error) => {
+  console.error('Failed to start server:', error);
+  process.exit(1);
 });
