@@ -13,20 +13,38 @@ import appointmentRoutes from './routes/appointmentRoutes.js';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.join(__dirname, '.env') });
 
+// Build allowed-origins list from FRONTEND_URL (comma-separated) + localhost fallback
+const allowedOrigins = (process.env.FRONTEND_URL || 'http://localhost:5173')
+  .split(',')
+  .map((u) => u.trim())
+  .filter(Boolean);
+
+const corsOptions = {
+  origin(origin, callback) {
+    // Allow requests with no origin (curl, mobile apps, server-to-server)
+    if (!origin) return callback(null, true);
+    if (
+      allowedOrigins.some((allowed) => origin === allowed) ||
+      origin.endsWith('.vercel.app')
+    ) {
+      return callback(null, true);
+    }
+    console.warn('CORS blocked origin:', origin);
+    callback(null, false);
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
 const app = express();
 const httpServer = createServer(app);
 
 const io = new Server(httpServer, {
-  cors: {
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
-    methods: ['GET', 'POST', 'PUT'],
-  },
+  cors: corsOptions,
 });
 
-app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
-  credentials: true,
-}));
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);
@@ -52,6 +70,7 @@ const start = async () => {
   await connectDB();
   httpServer.listen(PORT, HOST, () => {
     console.log(`Server running on ${HOST}:${PORT}`);
+    console.log('Allowed origins:', allowedOrigins);
   });
 };
 

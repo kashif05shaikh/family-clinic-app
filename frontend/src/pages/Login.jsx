@@ -22,8 +22,16 @@ export default function Login() {
       const { data } = await apiLogin(email, password);
       login(data.token, data.user);
       navigate(from, { replace: true });
-    } catch (res) {
-      setError(res.response?.data?.message || 'Login failed. Please check your credentials.');
+    } catch (err) {
+      if (err.response) {
+        setError(err.response.data?.message || 'Login failed. Please check your credentials.');
+      } else if (err.code === 'ERR_NETWORK' || err.message === 'Network Error') {
+        setError('Cannot reach the server. It may be waking up — please wait a moment and try again.');
+      } else if (err.code === 'ECONNABORTED') {
+        setError('Request timed out. The server may be starting up — please try again.');
+      } else {
+        setError('Login failed. Please check your credentials.');
+      }
     } finally {
       setLoading(false);
     }

@@ -53,8 +53,16 @@ export default function Appointment() {
       });
       setSuccess(true);
       setForm(initialForm);
-    } catch (res) {
-      setError(res.response?.data?.message || 'Failed to book appointment. Please try again.');
+    } catch (err) {
+      if (err.response) {
+        setError(err.response.data?.message || 'Failed to book appointment. Please try again.');
+      } else if (err.code === 'ERR_NETWORK' || err.message === 'Network Error') {
+        setError('Cannot reach the server. It may be waking up — please wait a moment and try again.');
+      } else if (err.code === 'ECONNABORTED') {
+        setError('Request timed out. The server may be starting up — please try again.');
+      } else {
+        setError('Failed to book appointment. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
