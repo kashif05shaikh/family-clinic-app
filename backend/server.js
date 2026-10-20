@@ -13,8 +13,9 @@ import appointmentRoutes from './routes/appointmentRoutes.js';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.join(__dirname, '.env') });
 
-// Build allowed-origins list from FRONTEND_URL (comma-separated) + localhost fallback
-const allowedOrigins = (process.env.FRONTEND_URL || 'http://localhost:5173')
+// Build allowed-origins list (check CLIENT_URL, FRONTEND_URL, or fallback to localhost)
+const frontendUrl = process.env.CLIENT_URL || process.env.FRONTEND_URL || 'http://localhost:5173';
+const allowedOrigins = frontendUrl
   .split(',')
   .map((u) => u.trim())
   .filter(Boolean);
