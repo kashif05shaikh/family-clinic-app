@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { login as apiLogin } from '../api/auth';
+import ThemeToggle from '../components/ui/ThemeToggle';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -38,26 +39,42 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-gradient-to-br from-slate-50 via-blue-50/40 to-indigo-100/60">
-      <div className="w-full max-w-md animate-slide-up">
-        <div className="bg-white rounded-xl shadow-[0_8px_30px_rgba(0,0,0,0.08)] border border-slate-200/80 p-8 transition-shadow duration-300 hover:shadow-[0_12px_40px_rgba(0,0,0,0.1)]">
-          {/* Logo placeholder */}
+    <div className="min-h-screen flex items-center justify-center px-4 py-12 relative overflow-hidden bg-slate-50 dark:bg-[#0b1120] transition-colors duration-300">
+      {/* Background Decorative Blur Blobs */}
+      <div className="absolute top-1/4 left-1/3 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary-500/10 dark:bg-primary-500/15 rounded-full blur-3xl pointer-events-none animate-float" />
+      <div className="absolute bottom-1/4 right-1/3 translate-x-1/2 translate-y-1/2 w-96 h-96 bg-teal-500/10 dark:bg-teal-500/10 rounded-full blur-3xl pointer-events-none animate-float-slow" />
+
+      {/* Top Bar Navigation */}
+      <div className="absolute top-6 left-6 right-6 flex items-center justify-between max-w-5xl mx-auto">
+        <Link
+          to="/"
+          className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+        >
+          <span>←</span> Back to Website
+        </Link>
+        <ThemeToggle />
+      </div>
+
+      <div className="w-full max-w-md animate-slide-up relative z-10">
+        <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl rounded-3xl shadow-xl dark:shadow-2xl border border-slate-200/80 dark:border-slate-800 p-8 sm:p-10 transition-all duration-300">
+          {/* Logo badge */}
           <div className="flex justify-center mb-6">
-            <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center text-white font-display font-bold text-xl shadow-lg shadow-primary-500/25">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center text-white font-display font-bold text-2xl shadow-lg shadow-primary-500/30 animate-pulse-subtle">
               FFC
             </div>
           </div>
-          <h1 className="font-display font-bold text-2xl text-center text-gray-900 mb-1">
-            Doctor Login
+
+          <h1 className="font-display font-bold text-2xl sm:text-3xl text-center text-slate-900 dark:text-white mb-1.5">
+            Doctor Portal
           </h1>
-          <p className="text-center text-gray-500 text-sm mb-6">
-            Falak Family Clinic · Secure access
+          <p className="text-center text-slate-500 dark:text-slate-400 text-sm mb-8">
+            Falak Family Clinic · Secure Physician Access
           </p>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label htmlFor="login-email" className="block text-sm font-medium text-gray-700 mb-1.5">
-                Email
+              <label htmlFor="login-email" className="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">
+                Email Address
               </label>
               <input
                 id="login-email"
@@ -66,12 +83,13 @@ export default function Login() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 autoComplete="email"
-                className="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 outline-none"
-                placeholder="you@clinic.com"
+                className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 outline-none text-sm"
+                placeholder="drfalakkhaleelahmed@gmail.com"
               />
             </div>
+
             <div>
-              <label htmlFor="login-password" className="block text-sm font-medium text-gray-700 mb-1.5">
+              <label htmlFor="login-password" className="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">
                 Password
               </label>
               <div className="relative">
@@ -82,13 +100,13 @@ export default function Login() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   autoComplete="current-password"
-                  className="w-full rounded-xl border border-gray-200 px-4 py-3 pr-12 text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 outline-none"
-                  placeholder="••••••••"
+                  className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 px-4 py-3 pr-12 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 outline-none text-sm"
+                  placeholder="••••••••••••"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword((p) => !p)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors duration-200"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
                   {showPassword ? (
@@ -104,23 +122,26 @@ export default function Login() {
                 </button>
               </div>
             </div>
+
             {error && (
-              <div className="rounded-xl bg-red-50 text-red-700 px-4 py-3 text-sm border border-red-100">
-                {error}
+              <div className="rounded-xl bg-red-50 dark:bg-red-950/60 text-red-700 dark:text-red-300 px-4 py-3 text-sm border border-red-200 dark:border-red-800/80 animate-fade-in flex items-center gap-2">
+                <span>⚠️</span>
+                <span>{error}</span>
               </div>
             )}
+
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-xl bg-primary-600 text-white font-semibold py-3.5 flex items-center justify-center gap-2 transition-all duration-200 hover:bg-primary-700 hover:shadow-lg hover:shadow-primary-500/25 disabled:opacity-70 disabled:hover:shadow-none active:scale-[0.99]"
+              className="w-full rounded-xl bg-primary-600 hover:bg-primary-500 text-white font-semibold py-3.5 flex items-center justify-center gap-2 transition-all duration-300 shadow-lg shadow-primary-600/25 hover:shadow-primary-600/40 disabled:opacity-70 active:scale-[0.98]"
             >
               {loading ? (
                 <>
                   <span className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
-                  Signing in...
+                  <span>Signing In...</span>
                 </>
               ) : (
-                'Sign In'
+                'Sign In to Dashboard'
               )}
             </button>
           </form>

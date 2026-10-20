@@ -19,13 +19,13 @@ const icons = {
 };
 
 export const sidebarNavItems = [
-  { to: '/dashboard', label: 'Dashboard', iconKey: 'dashboard', end: true },
-  { to: '/dashboard/appointments', label: 'Appointments', iconKey: 'appointments', end: false },
+  { to: '/dashboard', label: 'Dashboard Overview', iconKey: 'dashboard', end: true },
+  { to: '/dashboard/appointments', label: 'Appointment Queue', iconKey: 'appointments', end: false },
 ];
 
 export default function SidebarNav({ onItemClick, renderLogout }) {
   return (
-    <nav className="flex-1 px-3 py-4 space-y-1">
+    <nav className="flex-1 px-3 py-4 space-y-1.5">
       {sidebarNavItems.map(({ to, label, iconKey, end }) => (
         <NavLink
           key={to}
@@ -33,10 +33,10 @@ export default function SidebarNav({ onItemClick, renderLogout }) {
           end={end}
           onClick={onItemClick}
           className={({ isActive }) =>
-            `flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200 ease-out ${
+            `flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-300 ${
               isActive
-                ? 'bg-primary-500/10 text-primary-700 shadow-sm'
-                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                ? 'bg-primary-50 dark:bg-primary-950/60 text-primary-700 dark:text-primary-300 shadow-sm border border-primary-200/50 dark:border-primary-800/50 font-semibold'
+                : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
             }`
           }
         >
@@ -44,7 +44,9 @@ export default function SidebarNav({ onItemClick, renderLogout }) {
             <>
               <span
                 className={`flex shrink-0 w-9 h-9 items-center justify-center rounded-lg transition-colors ${
-                  isActive ? 'bg-primary-500/15 text-primary-600' : 'bg-slate-100 text-slate-500'
+                  isActive
+                    ? 'bg-primary-500/15 dark:bg-primary-400/20 text-primary-600 dark:text-primary-400'
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
                 }`}
               >
                 {icons[iconKey]?.('w-5 h-5')}
@@ -55,7 +57,7 @@ export default function SidebarNav({ onItemClick, renderLogout }) {
         </NavLink>
       ))}
       {renderLogout && (
-        <div className="pt-4 mt-4 border-t border-slate-200/80">
+        <div className="pt-4 mt-4 border-t border-slate-100 dark:border-slate-800">
           {renderLogout(icons.logout)}
         </div>
       )}

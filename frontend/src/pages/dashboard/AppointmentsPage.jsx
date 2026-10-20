@@ -92,10 +92,14 @@ export default function AppointmentsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
       <div>
-        <h1 className="font-display font-bold text-2xl text-slate-900">Appointments</h1>
-        <p className="text-slate-500 text-sm mt-1">Queue sorted by priority · Emergency first</p>
+        <h1 className="font-display font-bold text-2xl sm:text-3xl text-slate-900 dark:text-white">
+          Appointments Queue
+        </h1>
+        <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
+          Real-time patient queue sorted by priority · Emergency requests highlighted first
+        </p>
       </div>
 
       <AppointmentFilters
@@ -109,7 +113,7 @@ export default function AppointmentsPage() {
       />
 
       {error && (
-        <div className="rounded-xl bg-red-50 text-red-700 px-4 py-3 text-sm border border-red-100">
+        <div className="rounded-xl bg-red-50 dark:bg-red-950/60 text-red-700 dark:text-red-300 px-4 py-3 text-sm border border-red-200 dark:border-red-800">
           {error}
         </div>
       )}
@@ -119,28 +123,28 @@ export default function AppointmentsPage() {
         <div className="hidden md:block overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-slate-100 bg-slate-50/80">
-                <th className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wider px-6 py-4">
+              <tr className="border-b border-slate-100 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/50">
+                <th className="text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider px-6 py-4">
                   Patient
                 </th>
-                <th className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wider px-6 py-4">
+                <th className="text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider px-6 py-4">
                   Contact
                 </th>
-                <th className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wider px-6 py-4">
-                  Date & type
+                <th className="text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider px-6 py-4">
+                  Date & Type
                 </th>
-                <th className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wider px-6 py-4">
+                <th className="text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider px-6 py-4">
                   Status
                 </th>
-                <th className="text-right text-xs font-semibold text-slate-500 uppercase tracking-wider px-6 py-4">
-                  Actions
+                <th className="text-right text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider px-6 py-4">
+                  Update Status
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
               {filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-6 py-12 text-center text-slate-500">
+                  <td colSpan={5} className="px-6 py-12 text-center text-slate-500 dark:text-slate-400 text-sm">
                     No appointments match your filters.
                   </td>
                 </tr>
@@ -148,26 +152,26 @@ export default function AppointmentsPage() {
                 filtered.map((apt) => (
                   <tr
                     key={apt._id}
-                    className="group transition-colors duration-150 hover:bg-slate-50/80"
+                    className="group transition-colors duration-150 hover:bg-slate-50/80 dark:hover:bg-slate-800/40"
                   >
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <span className="font-medium text-slate-900">{apt.name}</span>
+                        <span className="font-semibold text-slate-900 dark:text-white">{apt.name}</span>
                         {apt.appointmentType === 'Emergency' && (
-                          <span className="rounded-lg border border-red-200 bg-red-50 px-2 py-0.5 text-xs font-medium text-red-700">
-                            Emergency
+                          <span className="rounded-lg border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950/60 px-2 py-0.5 text-xs font-semibold text-red-700 dark:text-red-300 animate-pulse">
+                            🚨 Emergency
                           </span>
                         )}
                       </div>
-                      <p className="text-sm text-slate-500 mt-0.5 truncate max-w-[200px]">
+                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 truncate max-w-[220px]">
                         {apt.symptoms}
                       </p>
                     </td>
-                    <td className="px-6 py-4 text-sm text-slate-600">
-                      <div>{apt.phone}</div>
-                      <div className="text-slate-500 truncate max-w-[180px]">{apt.email}</div>
+                    <td className="px-6 py-4 text-xs text-slate-600 dark:text-slate-300">
+                      <div className="font-medium text-slate-900 dark:text-slate-200">{apt.phone}</div>
+                      <div className="text-slate-500 dark:text-slate-400 truncate max-w-[180px]">{apt.email}</div>
                     </td>
-                    <td className="px-6 py-4 text-sm text-slate-600">
+                    <td className="px-6 py-4 text-xs text-slate-600 dark:text-slate-300">
                       {new Date(apt.preferredDate).toLocaleDateString(undefined, {
                         dateStyle: 'medium',
                       })}
@@ -179,7 +183,7 @@ export default function AppointmentsPage() {
                       <select
                         value={apt.status}
                         onChange={(e) => handleStatusChange(apt._id, e.target.value)}
-                        className="rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700 bg-white hover:border-slate-300 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 outline-none cursor-pointer"
+                        className="rounded-lg border border-slate-200 dark:border-slate-700 px-3 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-600 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none cursor-pointer"
                       >
                         <option value="Waiting">Pending</option>
                         <option value="In Progress">In Progress</option>
@@ -194,34 +198,34 @@ export default function AppointmentsPage() {
         </div>
 
         {/* Mobile cards */}
-        <div className="md:hidden divide-y divide-slate-100">
+        <div className="md:hidden divide-y divide-slate-100 dark:divide-slate-800">
           {filtered.length === 0 ? (
-            <div className="px-6 py-12 text-center text-slate-500">
+            <div className="px-6 py-12 text-center text-slate-500 dark:text-slate-400 text-sm">
               No appointments match your filters.
             </div>
           ) : (
             filtered.map((apt) => (
               <div
                 key={apt._id}
-                className={`p-6 transition-colors duration-150 hover:bg-slate-50/80 ${
+                className={`p-5 transition-colors duration-150 hover:bg-slate-50/80 dark:hover:bg-slate-800/40 ${
                   apt.appointmentType === 'Emergency' ? 'border-l-4 border-l-red-500' : ''
                 }`}
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="font-medium text-slate-900">{apt.name}</span>
+                      <span className="font-semibold text-slate-900 dark:text-white">{apt.name}</span>
                       {apt.appointmentType === 'Emergency' && (
-                        <span className="rounded-lg border border-red-200 bg-red-50 px-2 py-0.5 text-xs font-medium text-red-700">
-                          Emergency
+                        <span className="rounded-lg border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950/60 px-2 py-0.5 text-xs font-semibold text-red-700 dark:text-red-300">
+                          🚨 Emergency
                         </span>
                       )}
                     </div>
-                    <p className="text-sm text-slate-500 mt-1">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                       {apt.phone} · {apt.email}
                     </p>
-                    <p className="text-sm text-slate-600 mt-2 line-clamp-2">{apt.symptoms}</p>
-                    <p className="text-sm text-slate-500 mt-1">
+                    <p className="text-xs text-slate-600 dark:text-slate-300 mt-2 line-clamp-2">{apt.symptoms}</p>
+                    <p className="text-xs text-slate-400 mt-1">
                       {new Date(apt.preferredDate).toLocaleDateString(undefined, {
                         dateStyle: 'medium',
                       })}
@@ -232,7 +236,7 @@ export default function AppointmentsPage() {
                     <select
                       value={apt.status}
                       onChange={(e) => handleStatusChange(apt._id, e.target.value)}
-                      className="rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700 bg-white focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none cursor-pointer"
+                      className="rounded-lg border border-slate-200 dark:border-slate-700 px-2.5 py-1 text-xs font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none cursor-pointer"
                     >
                       <option value="Waiting">Pending</option>
                       <option value="In Progress">In Progress</option>

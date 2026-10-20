@@ -1,5 +1,5 @@
 /**
- * Reusable card with optional padding, hover shadow, and border.
+ * Reusable card with optional padding, hover shadow, and dark mode support.
  */
 export default function Card({
   children,
@@ -12,9 +12,9 @@ export default function Card({
   return (
     <Component
       className={[
-        'rounded-xl border border-slate-200/80 bg-white shadow-sm',
-        padding && 'p-6',
-        hover && 'transition-all duration-200 hover:shadow-md hover:border-slate-300/80',
+        'rounded-2xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-900/90 shadow-sm transition-all duration-300',
+        padding && 'p-6 sm:p-8',
+        hover && 'hover:-translate-y-1 hover:shadow-xl hover:border-primary-500/30 dark:hover:border-primary-500/40 cursor-pointer',
         className,
       ]
         .filter(Boolean)

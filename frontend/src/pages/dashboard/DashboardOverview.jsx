@@ -57,15 +57,19 @@ export default function DashboardOverview() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="font-display font-bold text-2xl text-slate-900">Dashboard</h1>
-          <p className="text-slate-500 text-sm mt-1">Overview of your clinic activity</p>
+          <h1 className="font-display font-bold text-2xl sm:text-3xl text-slate-900 dark:text-white">
+            Clinic Dashboard
+          </h1>
+          <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
+            Real-time patient attendance and workload summary
+          </p>
         </div>
       </div>
 
-      {/* Metric cards */}
+      {/* Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <MetricCard
           title="Appointments today"
@@ -80,35 +84,44 @@ export default function DashboardOverview() {
           accent="error"
         />
         <MetricCard
-          title="Waiting"
+          title="Pending appointments"
           value={waitingCount}
-          subtitle="Pending status"
+          subtitle="Waiting for consultation"
           icon={ClockIcon}
           accent="warning"
         />
       </div>
 
-      {/* Charts row */}
+      {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
-          <h3 className="font-display font-semibold text-slate-900 mb-4">Appointments this week</h3>
+          <h3 className="font-display font-bold text-base text-slate-900 dark:text-white mb-4">
+            Appointments This Week
+          </h3>
           <AppointmentsChart appointments={appointments} />
         </Card>
         <Card>
-          <h3 className="font-display font-semibold text-slate-900 mb-4">Status breakdown</h3>
+          <h3 className="font-display font-bold text-base text-slate-900 dark:text-white mb-4">
+            Status Breakdown
+          </h3>
           <StatusChart appointments={appointments} />
         </Card>
       </div>
 
-      {/* Quick action */}
+      {/* Quick Action */}
       <Card>
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h2 className="font-display font-semibold text-lg text-slate-900">Appointments</h2>
-            <p className="text-slate-500 text-sm mt-0.5">Manage and update appointment status</p>
+            <h2 className="font-display font-bold text-lg text-slate-900 dark:text-white">
+              Appointment Queue
+            </h2>
+            <p className="text-slate-500 dark:text-slate-400 text-sm mt-0.5">
+              Review incoming patient symptoms and update status
+            </p>
           </div>
           <Button as={Link} to="/dashboard/appointments" variant="primary" size="md">
-            View all
+            View Live Queue
+            <span className="ml-1">→</span>
           </Button>
         </div>
       </Card>
