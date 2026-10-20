@@ -1,8 +1,11 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
-import User from '../models/User.js';
+import mongoose from 'mongoose';
+import User, { userSchema } from '../models/User.js';
 
 const router = express.Router();
+
+const Doctor = mongoose.models.Doctor || mongoose.model('Doctor', userSchema, 'doctors');
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -21,7 +24,12 @@ router.post('/login', async (req, res) => {
       });
     }
 
-    const user = await User.findOne({ email }).select('+password');
+    // Try finding in User (users collection), fallback to Doctor (doctors collection)
+    let user = await User.findOne({ email }).select('+password');
+    if (!user) {
+      user = await Doctor.findOne({ email }).select('+password');
+    }
+
     if (!user) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
@@ -37,7 +45,7 @@ router.post('/login', async (req, res) => {
       user: {
         id: user._id,
         email: user.email,
-        role: user.role,
+        role: user.role || 'doctor',
       },
     });
   } catch (error) {
