@@ -5,6 +5,8 @@ import { Server } from 'socket.io';
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import path from 'path';
+import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
 
 import connectDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
@@ -67,8 +69,39 @@ io.on('connection', (socket) => {
 const PORT = Number(process.env.PORT) || 5000;
 const HOST = '0.0.0.0';
 
+const ensureDoctorOnStartup = async () => {
+  try {
+    const email = (process.env.DOCTOR_EMAIL || 'drfalakkhaleelahmed@gmail.com').toLowerCase().trim();
+    const password = process.env.DOCTOR_PASSWORD || 'Doctor@123';
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    const db = mongoose.connection.db;
+    if (!db) return;
+
+    await db.collection('users').updateOne(
+      { email: { $regex: new RegExp(`^${email}$`, 'i') } },
+      {
+        $set: {
+          email,
+          password: hashedPassword,
+          role: 'doctor',
+          updatedAt: new Date(),
+        },
+        $setOnInsert: {
+          createdAt: new Date(),
+        },
+      },
+      { upsert: true }
+    );
+    console.log(`Doctor user verified/synced for ${email}`);
+  } catch (err) {
+    console.error('Error ensuring doctor user:', err.message);
+  }
+};
+
 const start = async () => {
   await connectDB();
+  await ensureDoctorOnStartup();
   httpServer.listen(PORT, HOST, () => {
     console.log(`Server running on ${HOST}:${PORT}`);
     console.log('Allowed origins:', allowedOrigins);
