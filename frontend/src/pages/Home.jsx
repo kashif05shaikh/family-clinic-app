@@ -182,11 +182,17 @@ export default function Home() {
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {services.map((s, i) => (
+          {services.map((s) => (
             <Card
               key={s.title}
+              as={Link}
+              to="/appointment"
+              state={{
+                service: s.title,
+                emergency: s.title === 'Emergency Care',
+              }}
               hover
-              className="flex flex-col justify-between group relative overflow-hidden"
+              className="flex flex-col justify-between group relative overflow-hidden block text-left"
             >
               <div>
                 <div className="flex items-center justify-between mb-4">

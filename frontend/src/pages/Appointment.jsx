@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { createAppointment } from '../api/appointments';
 import { Card, Button } from '../components/ui';
 
@@ -14,10 +15,32 @@ const initialForm = {
 };
 
 export default function Appointment() {
-  const [form, setForm] = useState(initialForm);
+  const location = useLocation();
+  const selectedService = location.state?.service;
+  const isEmergency = location.state?.emergency || selectedService === 'Emergency Care';
+
+  const [form, setForm] = useState(() => ({
+    ...initialForm,
+    appointmentType: isEmergency ? 'Emergency' : 'Normal',
+    symptoms:
+      selectedService && selectedService !== 'Emergency Care'
+        ? `Consultation for ${selectedService}`
+        : '',
+  }));
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (selectedService) {
+      setForm((prev) => ({
+        ...prev,
+        appointmentType: isEmergency ? 'Emergency' : prev.appointmentType,
+        symptoms:
+          prev.symptoms || (selectedService !== 'Emergency Care' ? `Consultation for ${selectedService}` : ''),
+      }));
+    }
+  }, [selectedService, isEmergency]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
